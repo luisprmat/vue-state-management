@@ -1,15 +1,32 @@
 <script setup lang="ts">
+import Cart from '@/components/Cart.vue'
+import { format } from '@/lib/number'
+import type { Cart as CartType, Product } from '@/types'
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { XMarkIcon } from '@heroicons/vue/24/outline'
+import { computed } from 'vue'
 
 const props = defineProps<{
+  cart: CartType<Product>[]
   open: boolean
 }>()
+
+const emit = defineEmits<{
+  (e: 'close'): boolean
+  (e: 'increment', event: CartType<Product>): void
+  (e: 'decrement', event: CartType<Product>): void
+  (e: 'remove', event: CartType<Product>): void
+}>()
+
+const subtotal = computed<string>(() => {
+  const result = props.cart.reduce((total, product) => total + product.price * product.quantity, 0)
+  return format(result)
+})
 </script>
 
 <template>
   <TransitionRoot as="template" :show="open">
-    <Dialog class="relative z-10" @close="$emit('close')">
+    <Dialog class="relative z-10" @close="emit('close')">
       <TransitionChild
         as="template"
         enter="ease-in-out duration-500"
@@ -45,7 +62,7 @@ const props = defineProps<{
                         <button
                           type="button"
                           class="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
-                          @click="$emit('close')"
+                          @click="emit('close')"
                         >
                           <span class="absolute -inset-0.5" />
                           <span class="sr-only">Close panel</span>
@@ -56,7 +73,12 @@ const props = defineProps<{
 
                     <div class="mt-8">
                       <div class="flow-root">
-                        <!-- Cart Item -->
+                        <Cart
+                          @increment="emit('increment', $event)"
+                          @decrement="emit('decrement', $event)"
+                          @remove="emit('remove', $event)"
+                          :cart="cart"
+                        />
                       </div>
                     </div>
                   </div>
@@ -64,7 +86,7 @@ const props = defineProps<{
                   <div class="border-t border-gray-200 px-4 py-6 sm:px-6">
                     <div class="flex justify-between text-base font-medium text-gray-900">
                       <p>Subtotal</p>
-                      <p></p>
+                      <p>{{ subtotal }}</p>
                     </div>
                     <p class="mt-0.5 text-sm text-gray-500">
                       Shipping and taxes calculated at checkout.
@@ -82,7 +104,7 @@ const props = defineProps<{
                         <button
                           type="button"
                           class="font-medium text-indigo-600 hover:text-indigo-500"
-                          @click="$emit('close')"
+                          @click="emit('close')"
                         >
                           Continue Shopping
                           <span aria-hidden="true"> &rarr;</span>

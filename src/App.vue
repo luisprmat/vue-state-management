@@ -3,9 +3,36 @@ import CardOverlay from '@/components/CardOverlay.vue'
 import NavBar from '@/components/NavBar.vue'
 import ProductCard from '@/components/ProductCard.vue'
 import { ref } from 'vue'
-import type { Product } from './types'
+import type { Cart, Product } from './types'
 
 const cardOverlayOpen = ref(false)
+const cart = ref<Cart<Product>[]>([])
+
+const removeProduct = (product: Cart<Product>) => {
+  cart.value = cart.value.filter((value) => value.id !== product.id)
+}
+
+const incrementProduct = (product: Product) => {
+  const foundValue = cart.value.find((value) => value.id === product.id)
+  if (foundValue) {
+    foundValue.quantity++
+  } else {
+    cart.value.push({
+      ...product,
+      quantity: 1,
+    })
+  }
+}
+
+const decrementProduct = (product: Product) => {
+  const foundValue = cart.value.find((value) => value.id === product.id)
+  if (foundValue) {
+    foundValue.quantity--
+    if (foundValue.quantity <= 0) {
+      cart.value = cart.value.filter((value) => value.id !== product.id)
+    }
+  }
+}
 
 const products: Product[] = [
   {
@@ -50,10 +77,24 @@ const products: Product[] = [
 <template>
   <div>
     <NavBar @cart-clicked="cardOverlayOpen = true" />
-    <CardOverlay :open="cardOverlayOpen" @close="cardOverlayOpen = false" />
+    <CardOverlay
+      @increment="incrementProduct"
+      @decrement="decrementProduct"
+      @remove="removeProduct"
+      :cart="cart"
+      :open="cardOverlayOpen"
+      @close="cardOverlayOpen = false"
+    />
     <div class="mx-auto mt-4 max-w-7xl sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        <ProductCard :key="product.id" v-for="product in products" :product="product" />
+        <ProductCard
+          :cart="cart"
+          @increment="incrementProduct"
+          @decrement="decrementProduct"
+          :key="product.id"
+          v-for="product in products"
+          :product="product"
+        />
       </div>
     </div>
   </div>
