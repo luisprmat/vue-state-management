@@ -76,7 +76,7 @@ const products: Product[] = [
 
 <template>
   <div>
-    <NavBar @cart-clicked="cardOverlayOpen = true" />
+    <NavBar :cart="cart" @cart-clicked="cardOverlayOpen = true" />
     <CardOverlay
       @increment="incrementProduct"
       @decrement="decrementProduct"
