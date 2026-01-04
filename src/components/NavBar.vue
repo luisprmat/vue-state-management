@@ -1,13 +1,14 @@
 <script setup lang="ts">
+import { cartKey } from '@/provides'
 import type { Cart, Product } from '@/types'
 import { ShoppingCartIcon } from '@heroicons/vue/24/outline'
-import { computed } from 'vue'
+import { computed, inject, ref, type Ref } from 'vue'
 
-const props = defineProps<{
-  cart: Cart<Product>[]
-}>()
+const { cart } = inject<{
+  cart: Ref<Cart<Product>[]>
+}>(cartKey) || { cart: ref([]) }
 
-const amount = computed(() => props.cart.reduce((total, value) => total + value.quantity, 0))
+const amount = computed(() => cart.value.reduce((total, value) => total + value.quantity, 0))
 
 const emit = defineEmits(['cart-clicked'])
 </script>

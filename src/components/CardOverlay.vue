@@ -1,25 +1,28 @@
 <script setup lang="ts">
 import Cart from '@/components/Cart.vue'
 import { format } from '@/lib/number'
+import { cartKey } from '@/provides'
 import type { Cart as CartType, Product } from '@/types'
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { XMarkIcon } from '@heroicons/vue/24/outline'
-import { computed } from 'vue'
+import { computed, inject, ref, type Ref } from 'vue'
+
+const { cart } = inject<{
+  cart: Ref<CartType<Product>[]>
+}>(cartKey) || {
+  cart: ref([]),
+}
 
 const props = defineProps<{
-  cart: CartType<Product>[]
   open: boolean
 }>()
 
 const emit = defineEmits<{
   (e: 'close'): boolean
-  (e: 'increment', event: CartType<Product>): void
-  (e: 'decrement', event: CartType<Product>): void
-  (e: 'remove', event: CartType<Product>): void
 }>()
 
 const subtotal = computed<string>(() => {
-  const result = props.cart.reduce((total, product) => total + product.price * product.quantity, 0)
+  const result = cart.value.reduce((total, product) => total + product.price * product.quantity, 0)
   return format(result)
 })
 </script>
@@ -73,12 +76,7 @@ const subtotal = computed<string>(() => {
 
                     <div class="mt-8">
                       <div class="flow-root">
-                        <Cart
-                          @increment="emit('increment', $event)"
-                          @decrement="emit('decrement', $event)"
-                          @remove="emit('remove', $event)"
-                          :cart="cart"
-                        />
+                        <Cart />
                       </div>
                     </div>
                   </div>

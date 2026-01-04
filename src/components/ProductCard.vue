@@ -1,11 +1,21 @@
 <script setup lang="ts">
 import Stepper from '@/components/Stepper.vue'
 import { format } from '@/lib/number'
+import { cartKey } from '@/provides'
 import type { Cart, Product } from '@/types'
-import { computed } from 'vue'
+import { computed, inject, ref, type Ref } from 'vue'
+
+const { cart, incrementProduct, decrementProduct } = inject<{
+  cart: Ref<Cart<Product>[]>
+  incrementProduct: (product: Product) => void
+  decrementProduct: (product: Product) => void
+}>(cartKey) || { 
+  cart: ref([]), 
+  incrementProduct: () => {},
+  decrementProduct: () => {}
+}
 
 const props = defineProps<{
-  cart: Cart<Product>[]
   product: Product
 }>()
 
@@ -15,7 +25,7 @@ const emit = defineEmits<{
 }>()
 
 const amount = computed(() => {
-  const foundValue = props.cart.find((value) => value.id === props.product.id)
+  const foundValue = cart.value.find((value) => value.id === props.product.id)
   return foundValue ? foundValue.quantity : 0
 })
 </script>
@@ -39,8 +49,8 @@ const amount = computed(() => {
       </div>
       <Stepper
         :amount="amount"
-        @increment="emit('increment', product)"
-        @decrement="emit('decrement', product)"
+        @increment="incrementProduct(product)"
+        @decrement="decrementProduct(product)"
       />
     </div>
   </div>
