@@ -1,17 +1,13 @@
 <script setup lang="ts">
 import Cart from '@/components/Cart.vue'
 import { format } from '@/lib/number'
-import { cartKey } from '@/provides'
-import type { Cart as CartType, Product } from '@/types'
+import { cartKey, voidCart } from '@/provides'
+import type { CartContext } from '@/types'
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { XMarkIcon } from '@heroicons/vue/24/outline'
-import { computed, inject, ref, type Ref } from 'vue'
+import { computed, inject } from 'vue'
 
-const { cart } = inject<{
-  cart: Ref<CartType<Product>[]>
-}>(cartKey) || {
-  cart: ref([]),
-}
+const { cart } = inject<CartContext>(cartKey) || voidCart
 
 const props = defineProps<{
   open: boolean

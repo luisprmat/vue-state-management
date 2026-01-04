@@ -1,19 +1,11 @@
 <script setup lang="ts">
 import Stepper from '@/components/Stepper.vue'
 import { format } from '@/lib/number'
-import { cartKey } from '@/provides'
-import type { Cart, Product } from '@/types'
-import { computed, inject, ref, type Ref } from 'vue'
+import { cartKey, voidCart } from '@/provides'
+import type { CartContext, Product } from '@/types'
+import { computed, inject } from 'vue'
 
-const { cart, incrementProduct, decrementProduct } = inject<{
-  cart: Ref<Cart<Product>[]>
-  incrementProduct: (product: Product) => void
-  decrementProduct: (product: Product) => void
-}>(cartKey) || { 
-  cart: ref([]), 
-  incrementProduct: () => {},
-  decrementProduct: () => {}
-}
+const { cart, incrementProduct, decrementProduct } = inject<CartContext>(cartKey) || voidCart
 
 const props = defineProps<{
   product: Product

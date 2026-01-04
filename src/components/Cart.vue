@@ -1,20 +1,11 @@
 <script setup lang="ts">
 import CartRow from '@/components/CartRow.vue'
-import { cartKey } from '@/provides'
-import type { Cart, Product } from '@/types'
-import { inject, ref, type Ref } from 'vue'
+import { cartKey, voidCart } from '@/provides'
+import type { CartContext } from '@/types'
+import { inject } from 'vue'
 
-const { cart, incrementProduct, decrementProduct, removeProduct } = inject<{
-  cart: Ref<Cart<Product>[]>
-  incrementProduct: (product: Product) => void
-  decrementProduct: (product: Product) => void
-  removeProduct: (product: Cart<Product>) => void
-}>(cartKey) || {
-  cart: ref([]),
-  incrementProduct: () => {},
-  decrementProduct: () => {},
-  removeProduct: () => {},
-}
+const { cart, incrementProduct, decrementProduct, removeProduct } =
+  inject<CartContext>(cartKey) || voidCart
 </script>
 
 <template>
