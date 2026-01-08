@@ -2,45 +2,10 @@
 import CardOverlay from '@/components/CardOverlay.vue'
 import NavBar from '@/components/NavBar.vue'
 import ProductCard from '@/components/ProductCard.vue'
-import { cartKey } from '@/provides'
-import type { Cart, Product } from '@/types'
-import { provide, ref } from 'vue'
+import type { Product } from '@/types'
+import { ref } from 'vue'
 
 const cardOverlayOpen = ref(false)
-const cart = ref<Cart<Product>[]>([])
-
-const removeProduct = (product: Cart<Product>) => {
-  cart.value = cart.value.filter((value) => value.id !== product.id)
-}
-
-const incrementProduct = (product: Product) => {
-  const foundValue = cart.value.find((value) => value.id === product.id)
-  if (foundValue) {
-    foundValue.quantity++
-  } else {
-    cart.value.push({
-      ...product,
-      quantity: 1,
-    })
-  }
-}
-
-const decrementProduct = (product: Product) => {
-  const foundValue = cart.value.find((value) => value.id === product.id)
-  if (foundValue) {
-    foundValue.quantity--
-    if (foundValue.quantity <= 0) {
-      cart.value = cart.value.filter((value) => value.id !== product.id)
-    }
-  }
-}
-
-provide(cartKey, {
-  cart,
-  removeProduct,
-  incrementProduct,
-  decrementProduct,
-})
 
 const products: Product[] = [
   {
