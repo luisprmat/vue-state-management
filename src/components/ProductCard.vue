@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import Stepper from '@/components/Stepper.vue'
-import { useCart } from '@/composables/cart'
 import { format } from '@/lib/number'
+import { useCartStore } from '@/stores/cart'
 import type { Product } from '@/types'
 import { computed } from 'vue'
 
-const { cart, incrementProduct, decrementProduct } = useCart()
+const cartStore = useCartStore()
 
 const props = defineProps<{
   product: Product
 }>()
 
 const amount = computed(() => {
-  const foundValue = cart.value.find((value) => value.id === props.product.id)
+  const foundValue = cartStore.cart.find((value) => value.id === props.product.id)
   return foundValue ? foundValue.quantity : 0
 })
 </script>
@@ -36,8 +36,8 @@ const amount = computed(() => {
       </div>
       <Stepper
         :amount="amount"
-        @increment="incrementProduct(product)"
-        @decrement="decrementProduct(product)"
+        @increment="cartStore.incrementProduct(product)"
+        @decrement="cartStore.decrementProduct(product)"
       />
     </div>
   </div>

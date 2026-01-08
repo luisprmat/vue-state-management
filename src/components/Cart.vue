@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import CartRow from '@/components/CartRow.vue'
-import { useCart } from '@/composables/cart'
+import { useCartStore } from '@/stores/cart'
 
-const { cart, incrementProduct, decrementProduct, removeProduct } = useCart()
+const cartStore = useCartStore()
 </script>
 
 <template>
   <ul role="list" class="-my-6 divide-y divide-gray-200">
     <CartRow
-      @remove="removeProduct(orderLine)"
-      @increment="incrementProduct(orderLine)"
-      @decrement="decrementProduct(orderLine)"
-      v-for="orderLine in cart"
+      @remove="cartStore.removeProduct(orderLine)"
+      @increment="cartStore.incrementProduct(orderLine)"
+      @decrement="cartStore.decrementProduct(orderLine)"
+      v-for="orderLine in cartStore.cart"
       :order-line="orderLine"
       :key="orderLine.id"
     />

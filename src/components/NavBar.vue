@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { useCart } from '@/composables/cart'
+import { useCartStore } from '@/stores/cart'
 import { ShoppingCartIcon } from '@heroicons/vue/24/outline'
 import { computed } from 'vue'
 
-const { cart } = useCart()
+const cartStore = useCartStore()
 
-const amount = computed(() => cart.value.reduce((total, value) => total + value.quantity, 0))
+const amount = computed(() => cartStore.cart.reduce((total, value) => total + value.quantity, 0))
 
 const emit = defineEmits(['cart-clicked'])
 </script>
@@ -25,9 +25,9 @@ const emit = defineEmits(['cart-clicked'])
               <span class="sr-only">View cart</span>
               <ShoppingCartIcon class="size-6" aria-hidden="true" />
               <span
-                v-if="cart.length > 0"
+                v-if="cartStore.cart.length > 0"
                 class="ml-1 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-sm text-white"
-                >{{ amount }}</span
+                >{{ amount < 10 ? amount : '9+' }}</span
               >
             </button>
           </div>

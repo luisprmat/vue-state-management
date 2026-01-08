@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import Cart from '@/components/Cart.vue'
-import { useCart } from '@/composables/cart'
 import { format } from '@/lib/number'
 import router from '@/routes'
+import { useCartStore } from '@/stores/cart'
 
-const { subtotal, taxes, total, clearCart } = useCart()
+const cartStore = useCartStore()
 const confirmOrder = () => {
   alert('Thaks for ordering!')
-  clearCart()
+  cartStore.clearCart()
   router.push('/')
 }
 </script>
@@ -28,15 +28,15 @@ const confirmOrder = () => {
           <dl class="space-y-6 border-t border-gray-200 px-4 py-6 sm:px-6">
             <div class="flex items-center justify-between">
               <dt class="text-sm">Subtotal</dt>
-              <dd class="text-sm font-medium text-gray-900">{{ format(subtotal) }}</dd>
+              <dd class="text-sm font-medium text-gray-900">{{ format(cartStore.subtotal) }}</dd>
             </div>
             <div class="flex items-center justify-between">
               <dt class="text-sm">Taxes</dt>
-              <dd class="text-sm font-medium text-gray-900">{{ format(taxes) }}</dd>
+              <dd class="text-sm font-medium text-gray-900">{{ format(cartStore.taxes) }}</dd>
             </div>
             <div class="flex items-center justify-between border-t border-gray-200 pt-6">
               <dt class="text-base font-medium">Total</dt>
-              <dd class="text-base font-medium text-gray-900">{{ format(total) }}</dd>
+              <dd class="text-base font-medium text-gray-900">{{ format(cartStore.total) }}</dd>
             </div>
           </dl>
 
