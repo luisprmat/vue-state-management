@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import Cart from '@/components/Cart.vue'
+import { useCart } from '@/composables/cart'
 import { format } from '@/lib/number'
-import { cartKey, voidCart } from '@/provides'
-import type { CartContext } from '@/types'
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { XMarkIcon } from '@heroicons/vue/24/outline'
-import { computed, inject } from 'vue'
 
-const { cart } = inject<CartContext>(cartKey) || voidCart
+const { subtotal } = useCart()
 
 const props = defineProps<{
   open: boolean
@@ -16,11 +14,6 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'close'): boolean
 }>()
-
-const subtotal = computed<string>(() => {
-  const result = cart.value.reduce((total, product) => total + product.price * product.quantity, 0)
-  return format(result)
-})
 </script>
 
 <template>
@@ -80,7 +73,7 @@ const subtotal = computed<string>(() => {
                   <div class="border-t border-gray-200 px-4 py-6 sm:px-6">
                     <div class="flex justify-between text-base font-medium text-gray-900">
                       <p>Subtotal</p>
-                      <p>{{ subtotal }}</p>
+                      <p>{{ format(subtotal) }}</p>
                     </div>
                     <p class="mt-0.5 text-sm text-gray-500">
                       Shipping and taxes calculated at checkout.

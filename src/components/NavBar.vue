@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { cartKey, voidCart } from '@/provides'
-import type { CartContext } from '@/types'
+import { useCart } from '@/composables/cart'
 import { ShoppingCartIcon } from '@heroicons/vue/24/outline'
-import { computed, inject } from 'vue'
+import { computed } from 'vue'
 
-const { cart } = inject<CartContext>(cartKey) || voidCart
+const { cart } = useCart()
 
 const amount = computed(() => cart.value.reduce((total, value) => total + value.quantity, 0))
 

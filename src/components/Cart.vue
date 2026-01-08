@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import CartRow from '@/components/CartRow.vue'
-import { cartKey, voidCart } from '@/provides'
-import type { CartContext } from '@/types'
-import { inject } from 'vue'
+import { useCart } from '@/composables/cart'
 
-const { cart, incrementProduct, decrementProduct, removeProduct } =
-  inject<CartContext>(cartKey) || voidCart
+const { cart, incrementProduct, decrementProduct, removeProduct } = useCart()
 </script>
 
 <template>

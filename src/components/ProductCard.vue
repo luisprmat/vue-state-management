@@ -1,19 +1,14 @@
 <script setup lang="ts">
 import Stepper from '@/components/Stepper.vue'
+import { useCart } from '@/composables/cart'
 import { format } from '@/lib/number'
-import { cartKey, voidCart } from '@/provides'
-import type { CartContext, Product } from '@/types'
-import { computed, inject } from 'vue'
+import type { Product } from '@/types'
+import { computed } from 'vue'
 
-const { cart, incrementProduct, decrementProduct } = inject<CartContext>(cartKey) || voidCart
+const { cart, incrementProduct, decrementProduct } = useCart()
 
 const props = defineProps<{
   product: Product
-}>()
-
-const emit = defineEmits<{
-  (e: 'increment', product: Product): void
-  (e: 'decrement', product: Product): void
 }>()
 
 const amount = computed(() => {

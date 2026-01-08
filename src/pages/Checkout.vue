@@ -1,5 +1,15 @@
 <script setup lang="ts">
 import Cart from '@/components/Cart.vue'
+import { useCart } from '@/composables/cart'
+import { format } from '@/lib/number'
+import router from '@/routes'
+
+const { subtotal, taxes, total, clearCart } = useCart()
+const confirmOrder = () => {
+  alert('Thaks for ordering!')
+  clearCart()
+  router.push('/')
+}
 </script>
 
 <template>
@@ -18,24 +28,21 @@ import Cart from '@/components/Cart.vue'
           <dl class="space-y-6 border-t border-gray-200 px-4 py-6 sm:px-6">
             <div class="flex items-center justify-between">
               <dt class="text-sm">Subtotal</dt>
-              <dd class="text-sm font-medium text-gray-900">$64.00</dd>
-            </div>
-            <div class="flex items-center justify-between">
-              <dt class="text-sm">Shipping</dt>
-              <dd class="text-sm font-medium text-gray-900">$5.00</dd>
+              <dd class="text-sm font-medium text-gray-900">{{ format(subtotal) }}</dd>
             </div>
             <div class="flex items-center justify-between">
               <dt class="text-sm">Taxes</dt>
-              <dd class="text-sm font-medium text-gray-900">$5.52</dd>
+              <dd class="text-sm font-medium text-gray-900">{{ format(taxes) }}</dd>
             </div>
             <div class="flex items-center justify-between border-t border-gray-200 pt-6">
               <dt class="text-base font-medium">Total</dt>
-              <dd class="text-base font-medium text-gray-900">$75.52</dd>
+              <dd class="text-base font-medium text-gray-900">{{ format(total) }}</dd>
             </div>
           </dl>
 
           <div class="border-t border-gray-200 px-4 py-6 sm:px-6">
             <button
+              @click="confirmOrder"
               type="submit"
               class="w-full rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 focus:outline-none"
             >
