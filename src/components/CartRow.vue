@@ -18,7 +18,7 @@ const subtotal = computed(() => format(props.orderLine.price * props.orderLine.q
 
 <template>
   <li class="flex py-6">
-    <div class="ml-4 flex flex-1 flex-col">
+    <div class="flex flex-1 flex-col">
       <div>
         <div class="flex justify-between text-base font-medium text-gray-900">
           <h3>{{ orderLine.title }}</h3>
