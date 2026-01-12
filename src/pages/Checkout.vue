@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import Cart from '@/components/Cart.vue'
+import ProductGrid from '@/components/ProductGrid.vue'
 import { format } from '@/lib/number'
 import router from '@/routes'
 import { useCartStore } from '@/stores/cart'
+import { useProductsStore } from '@/stores/products'
 
 const cartStore = useCartStore()
+const productsStore = useProductsStore()
 const confirmOrder = () => {
   alert('Thaks for ordering!')
   cartStore.clearCart()
@@ -15,6 +18,14 @@ const confirmOrder = () => {
 <template>
   <div>
     <div class="mx-auto max-w-2xl px-4 pt-16 pb-24 sm:px-6 lg:max-w-7xl lg:px-8">
+      <div class="mb-3 sm:flex sm:items-center sm:justify-between">
+        <RouterLink
+          to="/"
+          class="rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
+        >
+          Go back home
+        </RouterLink>
+      </div>
       <h2 class="sr-only">Checkout</h2>
 
       <div class="mt-10 lg:mt-0">
@@ -41,6 +52,14 @@ const confirmOrder = () => {
           </dl>
 
           <div class="border-t border-gray-200 px-4 py-6 sm:px-6">
+            <template v-if="productsStore.upsellingProducts.length > 0">
+              <p class="mb-3 text-lg font-bold">Recommended with your purchase</p>
+              <ProductGrid
+                class="mb-3"
+                :loading="productsStore.loading"
+                :products="productsStore.upsellingProducts"
+              />
+            </template>
             <button
               @click="confirmOrder"
               type="submit"

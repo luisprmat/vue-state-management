@@ -5,6 +5,11 @@ export interface Product {
   title: string
   description: string
   price: number
+  use_for_upselling: boolean
+}
+
+export type ProductWrapper = {
+  data: Product[]
 }
 
 export interface Cart<T extends object> extends T {

@@ -11,10 +11,7 @@ const props = defineProps<{
   product: Product
 }>()
 
-const amount = computed(() => {
-  const foundValue = cartStore.cart.find((value) => value.id === props.product.id)
-  return foundValue ? foundValue.quantity : 0
-})
+const amount = computed(() => cartStore.amountForProduct(props.product))
 </script>
 
 <template>
