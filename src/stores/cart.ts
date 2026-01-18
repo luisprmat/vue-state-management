@@ -1,6 +1,7 @@
 import type { Cart, Product } from '@/types'
 import { defineStore } from 'pinia'
 import { computed, ref, watch } from 'vue'
+import { useOrdersStore } from './orders'
 
 export const useCartStore = defineStore('cart', () => {
   const cart = ref<Cart<Product>[]>([])
@@ -24,6 +25,12 @@ export const useCartStore = defineStore('cart', () => {
 
   const clearCart = () => {
     cart.value = []
+  }
+
+  const convert = async () => {
+    const returnValue = await useOrdersStore().confirmOrder(cart.value)
+    clearCart()
+    return returnValue
   }
 
   const incrementProduct = (product: Product) => {
@@ -70,6 +77,7 @@ export const useCartStore = defineStore('cart', () => {
     subtotal,
     taxes,
     total,
+    convert,
     amountForProduct,
     clearCart,
     removeProduct,

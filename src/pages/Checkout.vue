@@ -8,10 +8,14 @@ import { useProductsStore } from '@/stores/products'
 
 const cartStore = useCartStore()
 const productsStore = useProductsStore()
-const confirmOrder = () => {
-  alert('Thaks for ordering!')
-  cartStore.clearCart()
-  router.push('/')
+const confirmOrder = async () => {
+  const response = await cartStore.convert()
+  router.push({
+    name: 'thankyou',
+    params: {
+      orderId: response.data.id,
+    },
+  })
 }
 </script>
 

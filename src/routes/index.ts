@@ -3,6 +3,7 @@ import Home from '@/pages/Home.vue'
 import Login from '@/pages/Login.vue'
 import Profile from '@/pages/Profile.vue'
 import Register from '@/pages/Register.vue'
+import Thankyou from '@/pages/Thankyou.vue'
 import { useUserStore } from '@/stores/user'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -14,10 +15,18 @@ const routes = [
   {
     path: '/checkout',
     component: Checkout,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/login',
     component: Login,
+  },
+  {
+    path: '/thankyou/:orderId',
+    component: Thankyou,
+    name: 'thankyou',
   },
   {
     path: '/register',

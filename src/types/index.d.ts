@@ -56,3 +56,20 @@ export type RegistrationResponseSuccessfully = {
 }
 
 export type RegistrationResponseFailed = ErrorsResponse<RegisterCredentials>
+
+export interface OrderLine {
+  id: number
+  order_id: number
+  title: string
+  quantity: number
+  price_per_unit: number
+  total_price: number
+}
+
+export interface Order {
+  id: number
+  tax_rate: number
+  total_price: number
+  user_id: string
+  order_lines: OrderLine[]
+}

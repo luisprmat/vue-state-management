@@ -5,7 +5,7 @@ import type {
   ResourceWrapper,
   User,
 } from '@/types'
-import { mande } from 'mande'
+import { defaults, mande } from 'mande'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -33,19 +33,18 @@ export const useUserStore = defineStore('user', () => {
     authToken.value = token
     localStorage.setItem('token', JSON.stringify(token))
     if (token) {
+      defaults.headers.Authorization = `Bearer ${token}`
       try {
         await fetchUser()
       } catch (e) {
         setToken(null)
       }
+    } else {
+      delete defaults.headers.Authorization
     }
   }
   const fetchUser = async () => {
-    const response = await authUser.get<ResourceWrapper<User>>({
-      headers: {
-        Authorization: `Bearer ${authToken.value}`,
-      },
-    })
+    const response = await authUser.get<ResourceWrapper<User>>()
     user.value = response.data
   }
   const register = async ({
@@ -69,7 +68,6 @@ export const useUserStore = defineStore('user', () => {
       }
     } catch (e: unknown) {
       if (e && typeof e === 'object' && 'body' in e) {
-        console.log(e.body)
         return {
           success: false,
           body: e.body,
@@ -97,7 +95,6 @@ export const useUserStore = defineStore('user', () => {
       }
     } catch (e: unknown) {
       if (e && typeof e === 'object' && 'body' in e) {
-        console.log(e.body)
         return {
           success: false,
           body: e.body,

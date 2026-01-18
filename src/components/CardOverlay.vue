@@ -2,22 +2,17 @@
 import Cart from '@/components/Cart.vue'
 import { format } from '@/lib/number'
 import { useCartStore } from '@/stores/cart'
+import { useCartOverlayStore } from '@/stores/cartOverlayStore'
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { XMarkIcon } from '@heroicons/vue/24/outline'
 
 const cartStore = useCartStore()
-const props = defineProps<{
-  open: boolean
-}>()
-
-const emit = defineEmits<{
-  (e: 'close'): boolean
-}>()
+const cartOverlayStore = useCartOverlayStore()
 </script>
 
 <template>
-  <TransitionRoot as="template" :show="open">
-    <Dialog class="relative z-10" @close="emit('close')">
+  <TransitionRoot as="template" :show="cartOverlayStore.visible">
+    <Dialog class="relative z-10" @close="cartOverlayStore.close">
       <TransitionChild
         as="template"
         enter="ease-in-out duration-500"
@@ -53,7 +48,7 @@ const emit = defineEmits<{
                         <button
                           type="button"
                           class="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
-                          @click="emit('close')"
+                          @click="cartOverlayStore.close"
                         >
                           <span class="absolute -inset-0.5" />
                           <span class="sr-only">Close panel</span>
@@ -90,7 +85,7 @@ const emit = defineEmits<{
                         <button
                           type="button"
                           class="font-medium text-indigo-600 hover:text-indigo-500"
-                          @click="emit('close')"
+                          @click="cartOverlayStore.close"
                         >
                           Continue Shopping
                           <span aria-hidden="true"> &rarr;</span>
