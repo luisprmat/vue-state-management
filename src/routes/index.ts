@@ -1,5 +1,9 @@
 import Checkout from '@/pages/Checkout.vue'
 import Home from '@/pages/Home.vue'
+import Login from '@/pages/Login.vue'
+import Profile from '@/pages/Profile.vue'
+import Register from '@/pages/Register.vue'
+import { useUserStore } from '@/stores/user'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
@@ -11,11 +15,42 @@ const routes = [
     path: '/checkout',
     component: Checkout,
   },
+  {
+    path: '/login',
+    component: Login,
+  },
+  {
+    path: '/register',
+    component: Register,
+  },
+  {
+    path: '/profile',
+    component: Profile,
+    meta: {
+      requiresAuth: true,
+    },
+  },
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
+})
+
+router.beforeEach(async (to, from) => {
+  const userStore = useUserStore()
+  if (!userStore.didInit) {
+    await userStore.init()
+  }
+
+  if (to.meta.requiresAuth && !userStore.user) {
+    return {
+      path: '/login',
+      query: {
+        redirect: to.fullPath,
+      },
+    }
+  }
 })
 
 export default router

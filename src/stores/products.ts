@@ -1,5 +1,5 @@
 import { useCartStore } from '@/stores/cart'
-import type { Product, ProductWrapper } from '@/types'
+import type { CollectionWrapper, Product } from '@/types'
 import { mande } from 'mande'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
@@ -28,7 +28,7 @@ export const useProductsStore = defineStore('products', () => {
     let data: Product[] = []
 
     try {
-      const response = await productsApi.get<ProductWrapper>()
+      const response = await productsApi.get<CollectionWrapper<Product>>()
       data = response.data
     } catch (error) {
       console.error(error)
