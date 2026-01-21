@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import Cart from '@/components/Cart.vue'
+import CartEmpty from '@/components/CartEmpty.vue'
 import ProductGrid from '@/components/ProductGrid.vue'
+import { Button } from '@/components/ui/button'
 import { format } from '@/lib/number'
 import router from '@/routes'
 import { useCartStore } from '@/stores/cart'
@@ -32,7 +34,7 @@ const confirmOrder = async () => {
       </div>
       <h2 class="sr-only">Checkout</h2>
 
-      <div class="mt-10 lg:mt-0">
+      <div class="mt-10 lg:mt-0" v-if="!cartStore.isEmpty">
         <h2 class="text-lg font-medium text-gray-900">Order summary</h2>
 
         <div class="mt-4 rounded-lg border border-gray-200 bg-white shadow-sm">
@@ -72,6 +74,14 @@ const confirmOrder = async () => {
               Confirm order
             </button>
           </div>
+        </div>
+      </div>
+      <div v-else>
+        <CartEmpty />
+        <div class="mt-3 text-center">
+          <RouterLink to="/" as-child>
+            <Button>Let's shop!</Button>
+          </RouterLink>
         </div>
       </div>
     </div>

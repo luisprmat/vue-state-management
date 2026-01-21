@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import Cart from '@/components/Cart.vue'
+import CartEmpty from '@/components/CartEmpty.vue'
+import { Button } from '@/components/ui/button'
 import { format } from '@/lib/number'
 import { useCartStore } from '@/stores/cart'
 import { useCartOverlayStore } from '@/stores/cartOverlayStore'
@@ -57,10 +59,16 @@ const cartOverlayStore = useCartOverlayStore()
                       </div>
                     </div>
 
-                    <div class="mt-8">
+                    <div class="mt-8" v-if="!cartStore.isEmpty">
                       <div class="flow-root">
                         <Cart />
                       </div>
+                    </div>
+                    <div v-else class="flex h-full flex-col items-center justify-center">
+                      <CartEmpty />
+                      <Button size="lg" class="mt-3" @click="cartOverlayStore.close">
+                        Let's shop
+                      </Button>
                     </div>
                   </div>
 

@@ -23,6 +23,10 @@ export const useCartStore = defineStore('cart', () => {
     cart.value = cart.value.filter((value) => value.id !== product.id)
   }
 
+  const restoreLine = (line: Cart<Product>) => {
+    cart.value.push(line)
+  }
+
   const clearCart = () => {
     cart.value = []
   }
@@ -33,14 +37,14 @@ export const useCartStore = defineStore('cart', () => {
     return returnValue
   }
 
-  const incrementProduct = (product: Product) => {
+  const incrementProduct = (product: Product, amount = 1) => {
     const foundValue = cart.value.find((value) => value.id === product.id)
     if (foundValue) {
-      foundValue.quantity++
+      foundValue.quantity += amount
     } else {
       cart.value.push({
         ...product,
-        quantity: 1,
+        quantity: amount,
       })
     }
   }
@@ -72,11 +76,15 @@ export const useCartStore = defineStore('cart', () => {
     return foundValue ? foundValue.quantity : 0
   }
 
+  const isEmpty = computed(() => cart.value.length === 0)
+
   return {
     cart,
     subtotal,
     taxes,
     total,
+    isEmpty,
+    restoreLine,
     convert,
     amountForProduct,
     clearCart,
